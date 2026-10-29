@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="id" class="transition-colors duration-300">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adinda Joanita Bunga Asmara - Portfolio</title>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Tailwind Config for Dark Mode and Custom Colors -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class', // Mengaktifkan dark mode berdasarkan class
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        navy: {
+                            800: '#1e3a8a',
+                            900: '#172554',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* CSS untuk Navigasi Tab (Bukan Scroll) */
+        .tab-content {
+            display: none;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+
+        .tab-content.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Timeline styles untuk Tab Pengalaman */
+        .timeline-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 16px;
+            height: 100%;
+            width: 2px;
+            background: #e5e7eb;
+        }
+        .dark .timeline-container::before {
+            background: #374151; /* warna garis timeline mode gelap */
+        }
+        @media (min-width: 768px) {
+            .timeline-container::before {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+        }
+    </style>
+</head>
+<body class="font-sans text-gray-800 bg-gray-50 dark:bg-gray-900 dark:text-gray-200 antialiased selection:bg-blue-600 selection:text-white transition-colors duration-300 min-h-screen flex flex-col">
+
+    <!-- Navbar -->
+    <nav class="fixed w-full bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm shadow-sm dark:shadow-gray-900/50 z-50 transition-colors duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex-shrink-0 flex items-center">
+                    <button onclick="switchTab('home')" class="text-2xl font-bold text-navy-900 dark:text-white tracking-tight focus:outline-none">
+                        Adinda<span class="text-blue-600 dark:text-blue-400">.</span>
+                    </button>
+                </div>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <button onclick="switchTab('home')" data-target="home" class="nav-link text-blue-600 dark:text-blue-400 font-medium transition-colors focus:outline-none">Beranda</button>
+                    <button onclick="switchTab('experience')" data-target="experience" class="nav-link text-gray-600 dark:text-gray-300 hover:text-navy-900 dark:hover:text-white font-medium transition-colors focus:outline-none">Pengalaman</button>
+                    <button onclick="switchTab('skills')" data-target="skills" class="nav-link text-gray-600 dark:text-gray-300 hover:text-navy-900 dark:hover:text-white font-medium transition-colors focus:outline-none">Keahlian</button>
+                    <button onclick="switchTab('contact')" data-target="contact" class="nav-link text-gray-600 dark:text-gray-300 hover:text-navy-900 dark:hover:text-white font-medium transition-colors focus:outline-none">Kontak</button>
+                    
+                    <!-- Dark Mode Toggle Button -->
+                    <button onclick="toggleTheme()" class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 focus:outline-none transition-transform hover:scale-110 p-2 rounded-full bg-gray-100 dark:bg-gray-700">
+                        <i id="theme-icon" class="fas fa-moon text-lg w-5 h-5 flex items-center justify-center"></i>
+                    </button>
+                </div>
+
+                <!-- Mobile Menu & Theme Toggle -->
+                <div class="md:hidden flex items-center gap-4">
+                    <button onclick="toggleTheme()" class="text-gray-600 dark:text-gray-300 focus:outline-none p-2 rounded-full bg-gray-100 dark:bg-gray-700">
+                        <i id="theme-icon-mobile" class="fas fa-moon text-lg w-5 h-5 flex items-center justify-center"></i>
+                    </button>
+                    <button id="mobile-menu-btn" class="text-gray-600 dark:text-gray-300 focus:outline-none">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white dark:bg-gray-800 border-t border-gray-100 dark:border-gray-700 shadow-lg absolute w-full transition-colors duration-300">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <button onclick="switchTab('home')" data-target="home" class="nav-link-mobile block w-full text-left px-3 py-2 text-base font-medium text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-gray-700 rounded-md">Beranda</button>
+                <button onclick="switchTab('experience')" data-target="experience" class="nav-link-mobile block w-full text-left px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md">Pengalaman</button>
+                <button onclick="switchTab('skills')" data-target="skills" class="nav-link-mobile block w-full text-left px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md">Keahlian</button>
+                <button onclick="switchTab('contact')" data-target="contact" class="nav-link-mobile block w-full text-left px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md">Kontak</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area (Tabs) -->
+    <main class="flex-grow pt-28 pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
+        
+        <!-- TAB 1: Beranda & Tentang Saya -->
+        <section id="home" class="tab-content active visible">
+            <div class="flex flex-col-reverse lg:flex-row items-center gap-12 lg:gap-20 mt-8">
+                <!-- Teks & Ringkasan -->
+                <div class="w-full lg:w-2/3 text-center lg:text-left">
+                    <span class="inline-block py-1 px-3 rounded-full bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-400 text-sm font-semibold tracking-wider uppercase mb-6">Profil Kandidat</span>
+                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-navy-900 dark:text-white mb-4 leading-tight">
+                        Adinda Joanita <br class="hidden md:block">Bunga Asmara
+                    </h1>
+                    <h2 class="text-xl md:text-2xl text-blue-600 dark:text-blue-400 font-medium mb-8">
+                        Lulusan S1 Ekonomi Pembangunan (Cumlaude)
+                    </h2>
+                    
+                    <div class="space-y-4 text-gray-600 dark:text-gray-300 leading-relaxed text-lg text-justify mb-10">
+                        <p>
+                            Sebagai lulusan baru dengan predikat cumlaude (IPK 3.59/4.00), saya memiliki ketertarikan kuat untuk mengembangkan karier di bidang administrasi, pelayanan, dan operasional. Saya berpengalaman dalam praktik kerja nyata di instansi pemerintahan serta aktif memimpin berbagai kepanitiaan.
+                        </p>
+                        <p>
+                            Berbekal pengalaman tersebut, saya telah membentuk sikap disiplin, bertanggung jawab, dan adaptif. Saya mampu bekerja secara mandiri maupun berkolaborasi dalam tim, serta selalu berkomitmen untuk terus belajar demi memberikan kontribusi positif yang nyata bagi perusahaan.
+                        </p>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row justify-center lg:justify-start items-center gap-4">
+                        <button onclick="switchTab('contact')" class="px-8 py-3 w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-full shadow-lg shadow-blue-600/30 transform transition hover:-translate-y-1">
+                            Hubungi Saya
+                        </button>
+                        <button onclick="switchTab('experience')" class="px-8 py-3 w-full sm:w-auto bg-transparent border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 hover:border-blue-600 dark:hover:border-blue-400 hover:text-blue-600 dark:hover:text-blue-400 font-medium rounded-full transition transform hover:-translate-y-1">
+                            Lihat Pengalaman
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Pas Foto Placeholder -->
+                <div class="w-full lg:w-1/3 flex justify-center lg:justify-end">
+                    <div class="relative">
+                        <!-- Dekorasi background bulatan -->
+                        <div class="absolute inset-0 bg-blue-600 rounded-full blur-2xl opacity-20 dark:opacity-40 transform scale-110"></div>
+                        
+                        <!-- Space Pas Foto -->
+                        <div class="relative w-64 h-64 md:w-80 md:h-80 rounded-full overflow-hidden border-8 border-white dark:border-gray-800 shadow-2xl z-10 bg-gray-200 dark:bg-gray-700 flex items-center justify-center group">
+                            <!-- Ganti src img di bawah ini dengan link/path foto asli Adinda -->
+                            <img src="Pasfotosquare.jpeg" alt="Foto Adinda" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        </div>
+                        
+                        <!-- Badge -->
+                        <div class="absolute bottom-4 right-4 bg-white dark:bg-gray-800 p-3 rounded-full shadow-lg border border-gray-100 dark:border-gray-700 z-20 animate-bounce">
+                            <i class="fas fa-graduation-cap text-2xl text-blue-600 dark:text-blue-400"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 2: Pengalaman & Pendidikan -->
+        <section id="experience" class="tab-content">
+            <div class="text-center mb-16 mt-8">
+                <h2 class="text-3xl font-bold text-navy-900 dark:text-white inline-block relative">
+                    Pendidikan & Pengalaman
+                    <span class="absolute -bottom-3 left-1/2 transform -translate-x-1/2 w-16 h-1 bg-blue-600 rounded-full"></span>
+                </h2>
+            </div>
+
+            <!-- Pendidikan -->
+            <div class="max-w-4xl mx-auto mb-16">
+                <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 border border-gray-100 dark:border-gray-700 shadow-sm flex flex-col md:flex-row items-center md:items-start gap-6 relative overflow-hidden transition-colors duration-300">
+                    <div class="absolute top-0 left-0 w-2 h-full bg-blue-600"></div>
+                    <div class="w-16 h-16 bg-blue-100 dark:bg-gray-700 text-blue-600 dark:text-blue-400 rounded-2xl flex items-center justify-center text-3xl flex-shrink-0">
+                        <i class="fas fa-university"></i>
+                    </div>
+                    <div class="flex-grow text-center md:text-left">
+                        <h3 class="text-2xl font-bold text-navy-900 dark:text-white mb-1">Universitas Tidar</h3>
+                        <p class="text-blue-600 dark:text-blue-400 font-semibold text-lg mb-2">S1 Ekonomi Pembangunan</p>
+                        <p class="text-gray-500 dark:text-gray-400 mb-4"><i class="far fa-calendar-alt mr-2"></i> 2022 - 2026</p>
+                        
+                        <div class="flex flex-wrap justify-center md:justify-start gap-4">
+                            <div class="bg-gray-50 dark:bg-gray-700 px-4 py-2 rounded-lg border border-gray-100 dark:border-gray-600">
+                                <span class="block text-xs text-gray-500 dark:text-gray-400 mb-1">IPK Akhir</span>
+                                <span class="font-bold text-navy-900 dark:text-white">3.59 / 4.00</span>
+                            </div>
+                            <div class="bg-green-50 dark:bg-green-900/20 px-4 py-2 rounded-lg border border-green-100 dark:border-green-800">
+                                <span class="block text-xs text-green-600 dark:text-green-400 mb-1">Predikat Kelulusan</span>
+                                <span class="font-bold text-green-700 dark:text-green-300"><i class="fas fa-star text-xs mr-1"></i> Cumlaude</span>
+                            </div>
+                            <div class="bg-blue-50 dark:bg-blue-900/20 px-4 py-2 rounded-lg border border-blue-100 dark:border-blue-800">
+                                <span class="block text-xs text-blue-600 dark:text-blue-400 mb-1">Masa Studi</span>
+                                <span class="font-bold text-blue-700 dark:text-blue-300">3 Tahun 10 Bulan</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Timeline Pengalaman -->
+            <div class="relative timeline-container max-w-4xl mx-auto">
+                <!-- Exp 1 -->
+                <div class="relative z-10 mb-12 flex flex-col md:flex-row justify-between items-center w-full">
+                    <div class="order-1 md:w-5/12 hidden md:block"></div>
+                    <div class="z-20 flex items-center order-1 bg-blue-600 shadow-xl w-8 h-8 rounded-full absolute left-[16px] md:left-1/2 transform -translate-x-1/2 border-4 border-gray-50 dark:border-gray-900"></div>
+                    <div class="order-1 w-full pl-12 md:pl-0 md:w-5/12">
+                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-100 dark:border-gray-700 hover:-translate-y-1 transition-transform">
+                            <span class="text-sm font-bold text-blue-600 dark:text-blue-400 tracking-wide mb-2 block"><i class="far fa-calendar-alt mr-2"></i>Juli - Agustus 2025</span>
+                            <h3 class="font-bold text-lg text-navy-900 dark:text-white mb-1">Dinas Penanaman Modal & PTSP</h3>
+                            <p class="text-gray-500 dark:text-gray-400 text-sm font-medium mb-4"><i class="fas fa-briefcase mr-2"></i>Pekalongan - Pelayanan Perizinan</p>
+                            <ul class="text-gray-600 dark:text-gray-300 text-sm space-y-2 list-disc list-inside">
+                                <li>Mengelola & mengarsipkan dokumen fisik dan digital.</li>
+                                <li>Menginput data perizinan reklame & inventarisasi persyaratan.</li>
+                                <li>Melakukan pendampingan layanan gerai Mal Pelayanan Publik.</li>
+                                <li>Menyusun notulensi rapat evaluasi layanan.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Exp 2 -->
+                <div class="relative z-10 mb-12 flex flex-col md:flex-row justify-between items-center w-full">
+                    <div class="order-1 w-full pl-12 md:pl-0 md:w-5/12 md:text-right">
+                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-100 dark:border-gray-700 hover:-translate-y-1 transition-transform">
+                            <span class="text-sm font-bold text-blue-600 dark:text-blue-400 tracking-wide mb-2 block"><i class="far fa-calendar-alt mr-2"></i>Januari - Februari 2026</span>
+                            <h3 class="font-bold text-lg text-navy-900 dark:text-white mb-1">Kuliah Kerja Nyata (KKN)</h3>
+                            <p class="text-gray-500 dark:text-gray-400 text-sm font-medium mb-4"><i class="fas fa-user-tie mr-2"></i>Magelang - Sekretaris</p>
+                            <ul class="text-gray-600 dark:text-gray-300 text-sm space-y-2 md:list-none list-disc list-inside">
+                                <li>Menyusun proposal, surat, dan LPJ akhir kegiatan tepat waktu.</li>
+                                <li>Menyusun timeline & mengoordinasikan agenda harian.</li>
+                                <li>Mencatat notulensi rapat dan mengelola dokumen terstruktur.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="z-20 flex items-center order-1 bg-blue-600 shadow-xl w-8 h-8 rounded-full absolute left-[16px] md:left-1/2 transform -translate-x-1/2 border-4 border-gray-50 dark:border-gray-900"></div>
+                    <div class="order-1 md:w-5/12 hidden md:block"></div>
+                </div>
+
+                <!-- Exp 3 -->
+                <div class="relative z-10 mb-12 flex flex-col md:flex-row justify-between items-center w-full">
+                    <div class="order-1 md:w-5/12 hidden md:block"></div>
+                    <div class="z-20 flex items-center order-1 bg-blue-600 shadow-xl w-8 h-8 rounded-full absolute left-[16px] md:left-1/2 transform -translate-x-1/2 border-4 border-gray-50 dark:border-gray-900"></div>
+                    <div class="order-1 w-full pl-12 md:pl-0 md:w-5/12">
+                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-100 dark:border-gray-700 hover:-translate-y-1 transition-transform">
+                            <span class="text-sm font-bold text-blue-600 dark:text-blue-400 tracking-wide mb-2 block"><i class="far fa-calendar-alt mr-2"></i>Sep - Nov 2025</span>
+                            <h3 class="font-bold text-lg text-navy-900 dark:text-white mb-1">UKAI Ar-Ribath (UIF)</h3>
+                            <p class="text-gray-500 dark:text-gray-400 text-sm font-medium mb-4"><i class="fas fa-users mr-2"></i>Magelang - Divisi Acara</p>
+                            <ul class="text-gray-600 dark:text-gray-300 text-sm space-y-2 list-disc list-inside">
+                                <li>Merancang konsep acara Tabligh Akbar & alokasi waktu detail.</li>
+                                <li>Berkoordinasi dgn panitia terkait kebutuhan pengisi acara.</li>
+                                <li>Membantu registrasi & kelancaran kegiatan secara menyeluruh.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Exp 4 -->
+                <div class="relative z-10 flex flex-col md:flex-row justify-between items-center w-full">
+                    <div class="order-1 w-full pl-12 md:pl-0 md:w-5/12 md:text-right">
+                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-100 dark:border-gray-700 hover:-translate-y-1 transition-transform">
+                            <span class="text-sm font-bold text-blue-600 dark:text-blue-400 tracking-wide mb-2 block"><i class="far fa-calendar-alt mr-2"></i>Maret - April 2025</span>
+                            <h3 class="font-bold text-lg text-navy-900 dark:text-white mb-1">UKAI Ar-Ribath (Ramadan)</h3>
+                            <p class="text-gray-500 dark:text-gray-400 text-sm font-medium mb-4"><i class="fas fa-utensils mr-2"></i>Magelang - Divisi Konsumsi</p>
+                            <ul class="text-gray-600 dark:text-gray-300 text-sm space-y-2 md:list-none list-disc list-inside">
+                                <li>Merencanakan kebutuhan porsi & anggaran konsumsi acara.</li>
+                                <li>Negosiasi dan mengelola pemesanan menu dengan vendor.</li>
+                                <li>Mengatur pembagian konsumsi kpd 100+ peserta setiap harinya.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="z-20 flex items-center order-1 bg-blue-600 shadow-xl w-8 h-8 rounded-full absolute left-[16px] md:left-1/2 transform -translate-x-1/2 border-4 border-gray-50 dark:border-gray-900"></div>
+                    <div class="order-1 md:w-5/12 hidden md:block"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 3: Keahlian & Sertifikasi -->
+        <section id="skills" class="tab-content">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mt-8 max-w-6xl mx-auto">
+                
+                <!-- Kiri: Keahlian -->
+                <div>
+                    <div class="flex items-center gap-4 mb-8">
+                        <div class="w-10 h-1 bg-blue-600 rounded-full"></div>
+                        <h2 class="text-3xl font-bold text-navy-900 dark:text-white">Kompetensi & Keahlian</h2>
+                    </div>
+
+                    <!-- Soft Skills -->
+                    <div class="mb-10 bg-white dark:bg-gray-800 p-6 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm">
+                        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4 flex items-center"><i class="fas fa-users text-blue-600 dark:text-blue-400 w-6"></i> Soft Skills</h3>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-4 py-2 bg-blue-50 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 rounded-full text-sm font-medium border border-blue-100 dark:border-blue-800">Komunikasi</span>
+                            <span class="px-4 py-2 bg-blue-50 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 rounded-full text-sm font-medium border border-blue-100 dark:border-blue-800">Kerja sama Tim</span>
+                            <span class="px-4 py-2 bg-blue-50 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 rounded-full text-sm font-medium border border-blue-100 dark:border-blue-800">Empati</span>
+                            <span class="px-4 py-2 bg-blue-50 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 rounded-full text-sm font-medium border border-blue-100 dark:border-blue-800">Kepemimpinan</span>
+                            <span class="px-4 py-2 bg-blue-50 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 rounded-full text-sm font-medium border border-blue-100 dark:border-blue-800">Adaptif</span>
+                            <span class="px-4 py-2 bg-blue-50 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 rounded-full text-sm font-medium border border-blue-100 dark:border-blue-800">Manajemen Waktu</span>
+                            <span class="px-4 py-2 bg-blue-50 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 rounded-full text-sm font-medium border border-blue-100 dark:border-blue-800">Problem Solving</span>
+                        </div>
+                    </div>
+
+                    <!-- Hard Skills & Software -->
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm">
+                        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4 flex items-center"><i class="fas fa-laptop-code text-blue-600 dark:text-blue-400 w-6"></i> Hard Skills & Tools</h3>
+                        <div class="flex flex-wrap gap-2">
+                            <!-- Technical -->
+                            <span class="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-full text-sm font-medium border border-gray-200 dark:border-gray-600">Analisis Data</span>
+                            <span class="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-full text-sm font-medium border border-gray-200 dark:border-gray-600">Pengelolaan Data</span>
+                            <span class="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-full text-sm font-medium border border-gray-200 dark:border-gray-600">Administrasi</span>
+                            <span class="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-full text-sm font-medium border border-gray-200 dark:border-gray-600">Perencanaan Pembangunan</span>
+                            
+                            <!-- Software -->
+                            <span class="px-4 py-2 bg-navy-50 dark:bg-gray-700 text-navy-800 dark:text-blue-300 rounded-full text-sm font-medium shadow-sm border border-gray-200 dark:border-gray-600"><i class="fas fa-file-word mr-1"></i> Ms. Word</span>
+                            <span class="px-4 py-2 bg-navy-50 dark:bg-gray-700 text-navy-800 dark:text-blue-300 rounded-full text-sm font-medium shadow-sm border border-gray-200 dark:border-gray-600"><i class="fas fa-file-excel mr-1"></i> Ms. Excel</span>
+                            <span class="px-4 py-2 bg-navy-50 dark:bg-gray-700 text-navy-800 dark:text-blue-300 rounded-full text-sm font-medium shadow-sm border border-gray-200 dark:border-gray-600"><i class="fas fa-file-powerpoint mr-1"></i> Ms. Powerpoint</span>
+                            <span class="px-4 py-2 bg-navy-50 dark:bg-gray-700 text-navy-800 dark:text-blue-300 rounded-full text-sm font-medium shadow-sm border border-gray-200 dark:border-gray-600">Stata</span>
+                            <span class="px-4 py-2 bg-navy-50 dark:bg-gray-700 text-navy-800 dark:text-blue-300 rounded-full text-sm font-medium shadow-sm border border-gray-200 dark:border-gray-600">Eviews</span>
+                            <span class="px-4 py-2 bg-navy-50 dark:bg-gray-700 text-navy-800 dark:text-blue-300 rounded-full text-sm font-medium shadow-sm border border-gray-200 dark:border-gray-600">Canva</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Kanan: Sertifikasi -->
+                <div>
+                    <div class="flex items-center gap-4 mb-8">
+                        <div class="w-10 h-1 bg-blue-600 rounded-full"></div>
+                        <h2 class="text-3xl font-bold text-navy-900 dark:text-white">Sertifikasi & Pelatihan</h2>
+                    </div>
+
+                    <div class="space-y-6">
+                        <!-- Cert 1 -->
+                        <div class="flex bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-100 dark:border-gray-700 shadow-sm hover:border-blue-300 dark:hover:border-blue-500 transition-colors">
+                            <div class="flex-shrink-0 mr-6">
+                                <div class="w-14 h-14 bg-blue-50 dark:bg-gray-700 text-blue-600 dark:text-blue-400 rounded-full flex items-center justify-center text-2xl">
+                                    <i class="fas fa-certificate"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold text-navy-900 dark:text-white mb-1">Pemasaran Digital</h3>
+                                <p class="text-gray-600 dark:text-gray-400 font-medium text-sm">Badan Nasional Sertifikasi Profesi (BNSP)</p>
+                                <p class="text-sm text-blue-600 dark:text-blue-400 mt-2 font-medium"><i class="far fa-calendar-check mr-2"></i>April 2026</p>
+                            </div>
+                        </div>
+
+                        <!-- Cert 2 -->
+                        <div class="flex bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-100 dark:border-gray-700 shadow-sm hover:border-blue-300 dark:hover:border-blue-500 transition-colors">
+                            <div class="flex-shrink-0 mr-6">
+                                <div class="w-14 h-14 bg-blue-50 dark:bg-gray-700 text-blue-600 dark:text-blue-400 rounded-full flex items-center justify-center text-2xl">
+                                    <i class="fas fa-chart-line"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold text-navy-900 dark:text-white mb-1">Pelatihan Pengolahan Data Berbasis Stata</h3>
+                                <p class="text-gray-600 dark:text-gray-400 font-medium text-sm">Universitas Tidar</p>
+                                <p class="text-sm text-blue-600 dark:text-blue-400 mt-2 font-medium"><i class="far fa-calendar-check mr-2"></i>Oktober 2025</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- TAB 4: Kontak -->
+        <section id="contact" class="tab-content">
+            <div class="text-center mb-16 mt-8">
+                <h2 class="text-3xl font-bold text-navy-900 dark:text-white inline-block relative">
+                    Hubungi Saya
+                    <span class="absolute -bottom-3 left-1/2 transform -translate-x-1/2 w-16 h-1 bg-blue-600 rounded-full"></span>
+                </h2>
+                <p class="mt-6 text-gray-600 dark:text-gray-400 max-w-2xl mx-auto text-lg">
+                    Terbuka untuk peluang karier dan diskusi lebih lanjut. Silakan hubungi saya melalui salah satu kontak di bawah ini.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+                <!-- Email -->
+                <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl text-center shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-lg transition-shadow">
+                    <div class="w-16 h-16 bg-blue-50 dark:bg-gray-700 text-blue-600 dark:text-blue-400 rounded-full flex items-center justify-center text-2xl mx-auto mb-6">
+                        <i class="far fa-envelope"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-navy-900 dark:text-white mb-2">Email</h3>
+                    <a href="mailto:adindabunga252@gmail.com" class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors break-words font-medium">adindabunga252@gmail.com</a>
+                </div>
+
+                <!-- Phone -->
+                <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl text-center shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-lg transition-shadow">
+                    <div class="w-16 h-16 bg-blue-50 dark:bg-gray-700 text-blue-600 dark:text-blue-400 rounded-full flex items-center justify-center text-2xl mx-auto mb-6">
+                        <i class="fas fa-phone-alt"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-navy-900 dark:text-white mb-2">Telepon / WA</h3>
+                    <a href="tel:+6285801558464" class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium">+62 858-0155-8464</a>
+                </div>
+
+                <!-- Location -->
+                <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl text-center shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-lg transition-shadow">
+                    <div class="w-16 h-16 bg-blue-50 dark:bg-gray-700 text-blue-600 dark:text-blue-400 rounded-full flex items-center justify-center text-2xl mx-auto mb-6">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-navy-900 dark:text-white mb-2">Lokasi</h3>
+                    <p class="text-gray-600 dark:text-gray-300 font-medium">Pekalongan, Indonesia</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white dark:bg-gray-900 text-gray-500 dark:text-gray-400 py-6 border-t border-gray-200 dark:border-gray-800 transition-colors duration-300 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="text-sm">&copy; <script>document.write(new Date().getFullYear())</script> Adinda Joanita Bunga Asmara. Dibuat dengan HTML & Tailwind CSS.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // --- 1. Logika Navigasi Tab (Single Page App style) ---
+        function switchTab(tabId) {
+            // Sembunyikan semua konten tab
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active', 'visible');
+            });
+            
+            // Atur styling link navbar (Desktop)
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('text-blue-600', 'dark:text-blue-400');
+                link.classList.add('text-gray-600', 'dark:text-gray-300');
+                if(link.dataset.target === tabId) {
+                    link.classList.remove('text-gray-600', 'dark:text-gray-300');
+                    link.classList.add('text-blue-600', 'dark:text-blue-400');
+                }
+            });
+
+            // Atur styling link navbar (Mobile)
+            document.querySelectorAll('.nav-link-mobile').forEach(link => {
+                link.classList.remove('text-blue-600', 'dark:text-blue-400', 'bg-blue-50', 'dark:bg-gray-700');
+                link.classList.add('text-gray-700', 'dark:text-gray-300');
+                if(link.dataset.target === tabId) {
+                    link.classList.remove('text-gray-700', 'dark:text-gray-300');
+                    link.classList.add('text-blue-600', 'dark:text-blue-400', 'bg-blue-50', 'dark:bg-gray-700');
+                }
+            });
+
+            // Tampilkan tab yang diklik
+            const targetTab = document.getElementById(tabId);
+            targetTab.classList.add('active');
+            
+            // Beri sedikit delay untuk memicu transisi CSS (efek fade in up)
+            setTimeout(() => {
+                targetTab.classList.add('visible');
+            }, 50);
+            
+            // Tutup menu mobile jika sedang terbuka
+            document.getElementById('mobile-menu').classList.add('hidden');
+            
+            // Opsional: scroll ke atas halaman jika posisinya sedang di bawah
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // --- 2. Logika Mobile Menu Toggle ---
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+
+        btn.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+        });
+
+        // --- 3. Logika Dark Mode ---
+        const htmlElement = document.documentElement;
+        const themeIconDesk = document.getElementById('theme-icon');
+        const themeIconMob = document.getElementById('theme-icon-mobile');
+
+        // Cek preferensi dari LocalStorage atau OS
+        const currentTheme = localStorage.getItem('theme');
+        const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+        if (currentTheme === 'dark' || (!currentTheme && systemPrefersDark)) {
+            htmlElement.classList.add('dark');
+            setSunIcon();
+        } else {
+            setMoonIcon();
+        }
+
+        function toggleTheme() {
+            if (htmlElement.classList.contains('dark')) {
+                // Pindah ke Light Mode
+                htmlElement.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+                setMoonIcon();
+            } else {
+                // Pindah ke Dark Mode
+                htmlElement.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+                setSunIcon();
+            }
+        }
+
+        function setSunIcon() {
+            themeIconDesk.classList.replace('fa-moon', 'fa-sun');
+            themeIconMob.classList.replace('fa-moon', 'fa-sun');
+        }
+
+        function setMoonIcon() {
+            themeIconDesk.classList.replace('fa-sun', 'fa-moon');
+            themeIconMob.classList.replace('fa-sun', 'fa-moon');
+        }
+    </script>
+</body>
+</html>
